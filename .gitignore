@@ -162,3 +162,8 @@ cython_debug/
 #.idea/
 
 .venv/
+#added by dvc so git will not track data
+data/
+/data
+
+.dvc/config
