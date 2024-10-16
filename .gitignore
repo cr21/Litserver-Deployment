@@ -167,3 +167,4 @@ data/
 /data
 
 .dvc/config
+/evaluation_results
