@@ -17,4 +17,4 @@ WORKDIR  /opt/mount/
 COPY . .
 
 #ENTRYPOINT ["/bin/bash"]
-CMD ["python3", "src/infer.py"]
+# CMD ["python3", "src/infer.py"]

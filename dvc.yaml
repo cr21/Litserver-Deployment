@@ -1,0 +1,12 @@
+stages:
+  train:
+    #cmd: python3 src/train.py experiment=dogbreed_ex +trainer.log_every_n_steps=5
+    cmd: python3 src/train.py experiment=bird_classifier_ex +trainer.log_every_n_steps=5
+    deps:
+      - configs/experiment/dogbreed_ex.yaml
+      - configs/experiment/bird_classifier_ex.yaml
+      - src/train.py
+      - data
+    outs:
+    - logs:
+        cache: false

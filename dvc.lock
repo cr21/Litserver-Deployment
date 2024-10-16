@@ -1,0 +1,28 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python3 src/train.py experiment=bird_classifier_ex +trainer.log_every_n_steps=5
+    deps:
+    - path: configs/experiment/bird_classifier_ex.yaml
+      hash: md5
+      md5: 59e1a7ca4839726fcc1592b094d8bff5
+      size: 911
+    - path: configs/experiment/dogbreed_ex.yaml
+      hash: md5
+      md5: 6745010da2bf5b7d833cbba2b9f33599
+      size: 891
+    - path: data
+      hash: md5
+      md5: 7629abcf8f6d6ec3765d03e9adc665d3.dir
+      size: 64548168
+      nfiles: 1561
+    - path: src/train.py
+      hash: md5
+      md5: eea43df51b6853a6efb3197d8ad7295f
+      size: 3959
+    outs:
+    - path: logs
+      hash: md5
+      md5: 28d15c95f7b551957d629073e98c2040.dir
+      size: 11985
+      nfiles: 10
