@@ -77,11 +77,7 @@ class GenericDataModule(L.LightningDataModule):
         if stage == "test" or stage is None:
             self.test_dataset = test_dataset
             #self.class_names = test_dataset.classes if hasattr(train_dataset, 'classes') else None
-        
-        
-        print("+"*50)
         print(self.class_names)
-        print("+"*50)
     def train_dataloader(self) -> TRAIN_DATALOADERS:
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True,
                           num_workers=self.num_workers, pin_memory=self.pin_memory)
