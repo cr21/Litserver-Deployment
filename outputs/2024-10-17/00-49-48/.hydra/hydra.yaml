@@ -1,8 +1,8 @@
 hydra:
   run:
-    dir: ${paths.log_dir}/${task_name}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
   sweep:
-    dir: ${paths.log_dir}/${task_name}/multiruns/${now:%Y-%m-%d}_${now:%H-%M-%S}
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
     subdir: ${hydra.job.num}
   launcher:
     _target_: hydra._internal.core_plugins.basic_launcher.BasicLauncher
@@ -68,43 +68,35 @@ hydra:
   hydra_logging:
     version: 1
     formatters:
-      colorlog:
-        (): colorlog.ColoredFormatter
-        format: '[%(cyan)s%(asctime)s%(reset)s][%(purple)sHYDRA%(reset)s] %(message)s'
+      simple:
+        format: '[%(asctime)s][HYDRA] %(message)s'
     handlers:
       console:
         class: logging.StreamHandler
-        formatter: colorlog
+        formatter: simple
         stream: ext://sys.stdout
     root:
       level: INFO
       handlers:
       - console
+    loggers:
+      logging_example:
+        level: DEBUG
     disable_existing_loggers: false
   job_logging:
     version: 1
     formatters:
       simple:
         format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
-      colorlog:
-        (): colorlog.ColoredFormatter
-        format: '[%(cyan)s%(asctime)s%(reset)s][%(blue)s%(name)s%(reset)s][%(log_color)s%(levelname)s%(reset)s]
-          - %(message)s'
-        log_colors:
-          DEBUG: purple
-          INFO: green
-          WARNING: yellow
-          ERROR: red
-          CRITICAL: red
     handlers:
       console:
         class: logging.StreamHandler
-        formatter: colorlog
+        formatter: simple
         stream: ext://sys.stdout
       file:
         class: logging.FileHandler
         formatter: simple
-        filename: ${hydra.runtime.output_dir}/${task_name}.log
+        filename: ${hydra.runtime.output_dir}/${hydra.job.name}.log
     root:
       level: INFO
       handlers:
@@ -120,15 +112,15 @@ hydra:
     hydra:
     - hydra.mode=RUN
     task:
-    - experiment=bird_classifier_ex
-    - +trainer.log_every_n_steps=5
+    - data=birddata
+    - inference=bird_infer
   job:
-    name: train
+    name: infer
     chdir: null
-    override_dirname: +trainer.log_every_n_steps=5,experiment=bird_classifier_ex
+    override_dirname: data=birddata,inference=bird_infer
     id: ???
     num: ???
-    config_name: train
+    config_name: infer
     env_set: {}
     env_copy: []
     config:
@@ -153,21 +145,16 @@ hydra:
     - path: ''
       schema: structured
       provider: schema
-    output_dir: /Users/chiragtagadiya/MyProjects/EMLO_V4_projects/DVC-pytorch-lightning-MLOps/logs/train/runs/2024-10-16_12-14-06
+    output_dir: /Users/chiragtagadiya/MyProjects/EMLO_V4_projects/DVC-pytorch-lightning-MLOps/outputs/2024-10-17/00-49-48
     choices:
-      debug: null
-      experiment: bird_classifier_ex
-      hydra: default
-      paths: default
-      trainer: cpu
-      logger: default
-      callbacks: default
-      model: timm_classifier
+      inference: bird_infer
       data: birddata
+      model: timm_classifier
+      paths: default
       hydra/env: default
       hydra/callbacks: null
-      hydra/job_logging: colorlog
-      hydra/hydra_logging: colorlog
+      hydra/job_logging: default
+      hydra/hydra_logging: default
       hydra/hydra_help: default
       hydra/help: default
       hydra/sweeper: basic

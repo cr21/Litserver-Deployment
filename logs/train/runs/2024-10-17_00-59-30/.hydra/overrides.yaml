@@ -1,2 +1,2 @@
 - experiment=bird_classifier_ex
-- +trainer.log_every_n_steps=5
+- +trainer.log_every_n_steps=1

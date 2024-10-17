@@ -1,0 +1,43 @@
+name: ${inference.name}
+ckpt_path: ${oc.env:PROJECT_ROOT}/checkpoints/${inference.name}/best_model.ckpt
+save_dir: ${oc.env:PROJECT_ROOT}/predictions/${inference.name}/
+data_dir: ${data.data_dir}
+num_samples: 10
+img_size: 224
+task_name: inference
+log_task_name: infer_${data.name}
+paths:
+  root_dir: ${oc.env:PROJECT_ROOT}
+  data_dir: ${paths.root_dir}/data/
+  log_dir: ${paths.root_dir}/logs/
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}
+model:
+  _target_: src.model_builder.timm_classifier.TimmClassifier
+  base_model: vit_large_patch16_384
+  num_classes: 1000
+  pretrained: true
+  learning_rate: 0.001
+  weight_decay: 1.0e-05
+  patience: 3
+  factor: 0.1
+  min_lr: 1.0e-06
+data:
+  _target_: src.datamodules.data_module.GenericDataModule
+  data_dir: ${oc.env:PROJECT_ROOT}/data/bird_small
+  num_workers: 4
+  batch_size: 64
+  pin_memory: true
+  splits:
+  - 0.8
+  - 0.1
+  - 0.1
+  train_transform: null
+  test_transform: null
+inference:
+  name: bird_classification
+  ckpt_path: ${oc.env:PROJECT_ROOT}/checkpoints/${name}/best_model.ckpt
+  save_dir: ${oc.env:PROJECT_ROOT}/predictions/${name}/
+  data_dir: ${data.data_dir}
+  num_samples: 10
+  inference_glob_pattern: '*/*/*.jpg'

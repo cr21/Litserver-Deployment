@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: python3 src/train.py experiment=bird_classifier_ex +trainer.log_every_n_steps=5
+    cmd: python3 src/train.py experiment=bird_classifier_ex +trainer.log_every_n_steps=1
     deps:
     - path: configs/experiment/bird_classifier_ex.yaml
       hash: md5
@@ -13,9 +13,9 @@ stages:
       size: 891
     - path: data
       hash: md5
-      md5: 7629abcf8f6d6ec3765d03e9adc665d3.dir
+      md5: c881f7e2a977431ffba754fb645b81d6.dir
       size: 64548168
-      nfiles: 1561
+      nfiles: 1562
     - path: src/train.py
       hash: md5
       md5: eea43df51b6853a6efb3197d8ad7295f
@@ -23,8 +23,8 @@ stages:
     outs:
     - path: logs
       hash: md5
-      md5: 28d15c95f7b551957d629073e98c2040.dir
-      size: 11985
+      md5: 513f26de8b73650a7a183da7d4f14486.dir
+      size: 11987
       nfiles: 10
   evaluation:
     cmd: python3 src/eval.py data=birddata evaluation=bird_eval
@@ -47,9 +47,9 @@ stages:
       size: 249
     - path: data
       hash: md5
-      md5: 7629abcf8f6d6ec3765d03e9adc665d3.dir
+      md5: c881f7e2a977431ffba754fb645b81d6.dir
       size: 64548168
-      nfiles: 1561
+      nfiles: 1562
     - path: src/eval.py
       hash: md5
       md5: 8d1609f5ed339b6b7ecf9b8cf0c71cc9
@@ -57,7 +57,7 @@ stages:
     outs:
     - path: evaluations
       hash: md5
-      md5: a3c31ff2084e6a790cba3e6de5d7b1a1.dir
+      md5: 71041212213136906be69a0c747ceba3.dir
       size: 116
       nfiles: 1
   inference:
@@ -81,9 +81,9 @@ stages:
       size: 230
     - path: data
       hash: md5
-      md5: 7629abcf8f6d6ec3765d03e9adc665d3.dir
+      md5: c881f7e2a977431ffba754fb645b81d6.dir
       size: 64548168
-      nfiles: 1561
+      nfiles: 1562
     - path: src/infer.py
       hash: md5
       md5: 68c1f05616c2a5cca5ddfbebfe65af60
@@ -91,6 +91,6 @@ stages:
     outs:
     - path: predictions
       hash: md5
-      md5: 937c2154e259cbf9bf9b9f70f9a2312f.dir
-      size: 4107154
+      md5: 8071242779c9d5f884870a9f98b46309.dir
+      size: 4448832
       nfiles: 10
