@@ -113,8 +113,8 @@ jobs:
           uv run python src/utils/generate_plots.py # Script to generate plots with uv
           
       - name: Create CML report
-        env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}  # Use secret for repository token
+        # env:
+        #   REPO_TOKEN: ${{ secrets.REPO_TOKEN }}  # Use secret for repository token
         run: |
           echo "## Model Training Results" >> report.md
           echo "### Training Metrics" >> report.md
