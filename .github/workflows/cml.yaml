@@ -72,10 +72,13 @@ jobs:
       pull-requests: write
       repository-projects: write
       id-token: write
-    #needs: test  # Ensure this job runs after the test job
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install uv
+        run: |
+          pip install uv  # Install uv before running any uv commands
 
       - name: Set up Python 3.12
         run: |
