@@ -163,8 +163,8 @@ cython_debug/
 
 .venv/
 #added by dvc so git will not track data
-data/
-/data
+# data/
+# /data
 
 .dvc/config
 /evaluation_results
