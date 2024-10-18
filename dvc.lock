@@ -18,13 +18,13 @@ stages:
       nfiles: 1560
     - path: src/train.py
       hash: md5
-      md5: eea43df51b6853a6efb3197d8ad7295f
-      size: 3959
+      md5: df41b302d3a30315a1724a4390efab49
+      size: 6740
     outs:
     - path: logs
       hash: md5
-      md5: 64a49794ec662862251a9919d214a68a.dir
-      size: 15884
+      md5: 3df680637f7a1393186a5769c6c27b18.dir
+      size: 16833
       nfiles: 10
   evaluation:
     cmd: python3 src/eval.py data=dogbreed evaluation=dogbreed_eval
