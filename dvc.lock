@@ -23,8 +23,8 @@ stages:
     outs:
     - path: logs
       hash: md5
-      md5: 3df680637f7a1393186a5769c6c27b18.dir
-      size: 16833
+      md5: 64b904f481ec66469b574f0c1a721129.dir
+      size: 16800
       nfiles: 10
   evaluation:
     cmd: python3 src/eval.py data=dogbreed evaluation=dogbreed_eval
@@ -86,11 +86,11 @@ stages:
       nfiles: 1560
     - path: src/infer.py
       hash: md5
-      md5: 68c1f05616c2a5cca5ddfbebfe65af60
-      size: 3457
+      md5: 3d919b06ac867411c16b5803247066cd
+      size: 3446
     outs:
     - path: predictions
       hash: md5
-      md5: bc4c5ef62219d0be8c834cd3dc7d4683.dir
-      size: 705627
+      md5: 933f7025c7449d608e42aae3b300de1e.dir
+      size: 708477
       nfiles: 10
