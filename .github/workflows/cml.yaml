@@ -126,7 +126,7 @@ jobs:
           echo "![Test Confusion Matrix](./test_confusion_matrix.png)" >> report.md
           
           echo "### Predictions" >> report.md
-          for img in ./predictions/*.png; do
+          for img in ./predictions/*/*.png; do
             echo "![Prediction]($img)" >> report.md
           done
           
