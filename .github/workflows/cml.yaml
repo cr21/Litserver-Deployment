@@ -121,6 +121,10 @@ jobs:
           echo "![Training Loss](./train_loss_plot.png)" >> report.md
           echo "![Training Accuracy](./train_acc_plot.png)" >> report.md
           
+          echo "### Confusion Matrices" >> report.md
+          echo "![Training Confusion Matrix](./train_confusion_matrix.png)" >> report.md
+          echo "![Test Confusion Matrix](./test_confusion_matrix.png)" >> report.md
+          
           echo "### Test Metrics" >> report.md
           cat test_metrics.md >> report.md
           
