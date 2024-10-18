@@ -37,7 +37,7 @@ with open('test_metrics.md', 'w') as f:
 
 # Plot Training Accuracy
 plt.figure(figsize=(10, 5))
-plt.plot(data['epoch'], data['train/acc'],marker='o', color='b', label='Train Accuracy')  # Changed to solid line
+plt.plot(data['epoch'], data['train/acc'], marker='o', color='b', label='Train Accuracy')  # Changed to solid line
 plt.title('Training Accuracy Over Epochs')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
@@ -49,7 +49,7 @@ plt.close()
 
 # Plot Training Loss
 plt.figure(figsize=(10, 5))
-plt.plot(data['epoch'], data['train/loss'], marker='o', color='b',label='Train Loss')  # Changed to solid line
+plt.plot(data['epoch'], data['train/loss'], marker='o', color='b', label='Train Loss')  # Changed to solid line
 plt.title('Training Loss Over Epochs')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
@@ -58,3 +58,18 @@ plt.xticks(data['epoch'])
 plt.legend()
 plt.savefig('train_loss_plot.png')
 plt.close()
+
+# Create Predictions Markdown
+predictions_dir = './predictions'
+with open('predictions.md', 'w') as f:
+    f.write("### Predictions\n")
+    f.write("<div style='display: flex; flex-wrap: wrap;'>\n")
+    count = 0
+    for img in glob.glob(f'{predictions_dir}/*/*.png'):
+        print(img)
+        if count < 10:
+            f.write(f"<div style='margin: 5px;'><img src='{img}' width='200' /></div>\n")
+            count += 1
+        else:
+            break
+    f.write("</div>\n")
