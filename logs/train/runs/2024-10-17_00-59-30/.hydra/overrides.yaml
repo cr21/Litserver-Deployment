@@ -1,2 +1,0 @@
-- experiment=bird_classifier_ex
-- +trainer.log_every_n_steps=1

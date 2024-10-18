@@ -35,25 +35,24 @@ with open('test_metrics.md', 'w') as f:
 
 # Plot Training Accuracy
 plt.figure(figsize=(10, 5))
-plt.plot(data['epoch'], data['train/acc'], marker='o', color='b', label='Train Accuracy')
+plt.plot(data['epoch'], data['train/acc'], label='Train Accuracy')  # Changed to solid line
 plt.title('Training Accuracy Over Epochs')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.xticks(data['epoch'])
-plt.grid()
+# plt.grid()
 plt.legend()
 plt.savefig('train_acc_plot.png')
 plt.close()
 
 # Plot Training Loss
 plt.figure(figsize=(10, 5))
-plt.plot(data['epoch'], data['train/loss'], marker='o', color='r', label='Train Loss')
+plt.plot(data['epoch'], data['train/loss'], label='Train Loss')  # Changed to solid line
 plt.title('Training Loss Over Epochs')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.xticks(data['epoch'])
-plt.grid()
+# plt.grid()
 plt.legend()
 plt.savefig('train_loss_plot.png')
 plt.close()
-
