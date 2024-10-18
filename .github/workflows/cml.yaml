@@ -126,7 +126,7 @@ jobs:
           echo "![Test Confusion Matrix](./test_confusion_matrix.png)" >> report.md
           
           echo "### Predictions" >> report.md
-          cat predictions.md >> report.md
+          echo "![Predictions](./predictions_collage.png)" >> report.md
           
           echo "### Test Metrics" >> report.md
           cat test_metrics.md >> report.md
