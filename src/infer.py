@@ -62,7 +62,7 @@ def main(cfg: DictConfig):
     ckpt_path = Path(cfg.ckpt_path)
     save_dir = Path(cfg.save_dir)
     data_dir = Path(cfg.data_dir)
-    results_dir = save_dir / "results"
+    results_dir = save_dir 
     results_dir.mkdir(parents=True, exist_ok=True)
 
     # Load model
