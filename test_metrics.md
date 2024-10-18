@@ -1,5 +1,5 @@
 ## Test Metrics
 | Metric | Value |
 |--------|-------|
-| Test Accuracy | 0.924369752407074 |
-| Test Loss | 0.1792676597833633 |
+| Test Accuracy | 0.9579831957817078 |
+| Test Loss | 0.0904459580779075 |

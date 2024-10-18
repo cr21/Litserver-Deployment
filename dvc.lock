@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   train:
-    cmd: python3 src/train.py experiment=dogbreed_ex +trainer.log_every_n_steps=1
+    cmd: python3 src/train.py experiment=bird_classifier_ex +trainer.log_every_n_steps=1
     deps:
     - path: configs/experiment/bird_classifier_ex.yaml
       hash: md5
@@ -23,11 +23,11 @@ stages:
     outs:
     - path: logs
       hash: md5
-      md5: 64b904f481ec66469b574f0c1a721129.dir
-      size: 16800
+      md5: 74186bdfaf51e80d5ab52981605a6dda.dir
+      size: 17091
       nfiles: 10
   evaluation:
-    cmd: python3 src/eval.py data=dogbreed evaluation=dogbreed_eval
+    cmd: python3 src/eval.py data=birddata evaluation=bird_eval
     deps:
     - path: configs/data/birddata.yaml
       hash: md5
@@ -57,11 +57,11 @@ stages:
     outs:
     - path: evaluations
       hash: md5
-      md5: 6bb723e2b934f84c709638e992f9898f.dir
-      size: 114
+      md5: bdeb0d46409cca2172acc8b61f44bc9e.dir
+      size: 116
       nfiles: 1
   inference:
-    cmd: python3 src/infer.py data=dogbreed inference=dogbreed_infer
+    cmd: python3 src/infer.py data=birddata inference=bird_infer
     deps:
     - path: configs/data/birddata.yaml
       hash: md5
@@ -91,6 +91,6 @@ stages:
     outs:
     - path: predictions
       hash: md5
-      md5: 933f7025c7449d608e42aae3b300de1e.dir
-      size: 708477
+      md5: bdb557d3f22b241c75cc56d7635e2f81.dir
+      size: 4652767
       nfiles: 10
