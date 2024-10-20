@@ -100,13 +100,13 @@ jobs:
 
       - name: Pull data with DVC
         run: |
-          #uv run dvc pull --remote gdrive
-          uv run dvc pull --remote s3_store  # Pull data from S3
+          uv run dvc pull --remote gdrive
+          #uv run dvc pull --remote s3_store  # Pull data from S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS Access Key ID
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS Secret Access Key
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}  # Optional: AWS region
-          #GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}  # Use secret for Google Drive credentials
+          GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}  # Use secret for Google Drive credentials
 
       - name: Train model
         run: |

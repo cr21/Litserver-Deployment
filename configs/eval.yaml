@@ -16,6 +16,7 @@ data_dir: ${evaluation.data_dir}
 batch_size: ${evaluation.batch_size}
 num_workers: ${evaluation.num_workers}
 
+
 # trainer:
 #   _target_: pytorch_lightning.Trainer
 #   accelerator: 'auto'

@@ -167,7 +167,6 @@ def main(cfg: DictConfig):
     # Create trainer
     log.info(f"Instantiating trainer <{cfg.trainer._target_}>")
     trainer: pl.Trainer = hydra.utils.instantiate(cfg.trainer, callbacks=callbacks, logger=loggers)
-
     # Train the model
     if cfg.get("train"):
         train(cfg, trainer, model, datamodule)

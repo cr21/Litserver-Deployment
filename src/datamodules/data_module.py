@@ -89,3 +89,4 @@ class GenericDataModule(L.LightningDataModule):
     def test_dataloader(self) -> EVAL_DATALOADERS:
         return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False,
                           num_workers=self.num_workers, pin_memory=self.pin_memory)
+

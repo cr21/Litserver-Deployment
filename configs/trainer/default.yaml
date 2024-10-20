@@ -4,7 +4,6 @@ default_root_dir: ${paths.output_dir}
 
 min_epochs: 1 # prevents early stopping
 max_epochs: 2
-
 accelerator: auto
 devices: 1
 

@@ -24,7 +24,7 @@ model:
   min_lr: 1.0e-06
 data:
   _target_: src.datamodules.data_module.GenericDataModule
-  data_dir: ${oc.env:PROJECT_ROOT}/data/dogbreed
+  data_dir: ${oc.env:PROJECT_ROOT}/data/bird_small
   num_workers: 4
   batch_size: 64
   pin_memory: true
@@ -35,9 +35,9 @@ data:
   train_transform: null
   test_transform: null
 inference:
-  name: dogbreed_classification
+  name: bird_classification
   ckpt_path: ${oc.env:PROJECT_ROOT}/checkpoints/${name}/best_model.ckpt
   save_dir: ${oc.env:PROJECT_ROOT}/predictions/${name}/
   data_dir: ${data.data_dir}
   num_samples: 10
-  inference_glob_pattern: '*/*.jpg'
+  inference_glob_pattern: '*/*/*.jpg'

@@ -112,12 +112,12 @@ hydra:
     hydra:
     - hydra.mode=RUN
     task:
-    - data=dogbreed
-    - inference=dogbreed_infer
+    - data=birddata
+    - inference=bird_infer
   job:
     name: infer
     chdir: null
-    override_dirname: data=dogbreed,inference=dogbreed_infer
+    override_dirname: data=birddata,inference=bird_infer
     id: ???
     num: ???
     config_name: infer
@@ -145,10 +145,10 @@ hydra:
     - path: ''
       schema: structured
       provider: schema
-    output_dir: /Users/chiragtagadiya/MyProjects/EMLO_V4_projects/DVC-pytorch-lightning-MLOps/outputs/2024-10-18/02-33-01
+    output_dir: /Users/chiragtagadiya/MyProjects/EMLO_V4_projects/DVC-pytorch-lightning-MLOps/outputs/2024-10-20/02-42-36
     choices:
-      inference: dogbreed_infer
-      data: dogbreed
+      inference: bird_infer
+      data: birddata
       model: timm_classifier
       paths: default
       hydra/env: default

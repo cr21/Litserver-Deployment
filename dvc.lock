@@ -5,7 +5,7 @@ stages:
     deps:
     - path: configs/experiment/bird_classifier_ex.yaml
       hash: md5
-      md5: e486634bedc99a260612d8b149356d15
+      md5: 3fdff6bc9598f68e40edc1e59c3de1ad
       size: 912
     - path: configs/experiment/dogbreed_ex.yaml
       hash: md5
@@ -13,18 +13,18 @@ stages:
       size: 892
     - path: data
       hash: md5
-      md5: 2edccd77746ff73a19db055c14aa19c7.dir
-      size: 64548146
-      nfiles: 1560
+      md5: 97508e4c8a46a85e3cd8e35c13f8a74e.dir
+      size: 66665399
+      nfiles: 1581
     - path: src/train.py
       hash: md5
-      md5: df41b302d3a30315a1724a4390efab49
-      size: 6740
+      md5: 1c9f56278ada54a5b045cf07bf231b11
+      size: 6801
     outs:
     - path: logs
       hash: md5
-      md5: 74186bdfaf51e80d5ab52981605a6dda.dir
-      size: 17091
+      md5: 476947edc81586c62718e5e178163be7.dir
+      size: 17112
       nfiles: 10
   evaluation:
     cmd: python3 src/eval.py data=birddata evaluation=bird_eval
@@ -39,26 +39,26 @@ stages:
       size: 287
     - path: configs/evaluation/bird_eval.yaml
       hash: md5
-      md5: 22524ed4a8d9e55b7bba8e27f3fbbeee
-      size: 245
+      md5: 1ba8bd56a7cca35d1a822067b3a526d7
+      size: 244
     - path: configs/evaluation/dogbreed_eval.yaml
       hash: md5
       md5: 6d44773c6a41a03b625698f924b86162
       size: 249
     - path: data
       hash: md5
-      md5: 2edccd77746ff73a19db055c14aa19c7.dir
-      size: 64548146
-      nfiles: 1560
+      md5: 97508e4c8a46a85e3cd8e35c13f8a74e.dir
+      size: 66665399
+      nfiles: 1581
     - path: src/eval.py
       hash: md5
-      md5: 8d1609f5ed339b6b7ecf9b8cf0c71cc9
-      size: 2513
+      md5: d3ed4831cec4cbbd926140cc08f758d6
+      size: 2595
     outs:
     - path: evaluations
       hash: md5
-      md5: bdeb0d46409cca2172acc8b61f44bc9e.dir
-      size: 116
+      md5: 7d028379c343b8f085d1d21cfb14cd09.dir
+      size: 113
       nfiles: 1
   inference:
     cmd: python3 src/infer.py data=birddata inference=bird_infer
@@ -81,9 +81,9 @@ stages:
       size: 230
     - path: data
       hash: md5
-      md5: 2edccd77746ff73a19db055c14aa19c7.dir
-      size: 64548146
-      nfiles: 1560
+      md5: 97508e4c8a46a85e3cd8e35c13f8a74e.dir
+      size: 66665399
+      nfiles: 1581
     - path: src/infer.py
       hash: md5
       md5: 3d919b06ac867411c16b5803247066cd
@@ -91,6 +91,6 @@ stages:
     outs:
     - path: predictions
       hash: md5
-      md5: bdb557d3f22b241c75cc56d7635e2f81.dir
-      size: 4652767
+      md5: 31e62f36a389dcc19865b29c450fe211.dir
+      size: 3989543
       nfiles: 10

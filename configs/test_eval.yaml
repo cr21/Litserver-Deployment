@@ -10,7 +10,7 @@ defaults:
 model:
   _target_: src.model_builder.timm_classifier.TimmClassifier
   model_name: resnet18
-  num_classes: 10
+  num_classes: 11
 
 data:
   _target_: src.datamodules.data_module.GenericDataModule
