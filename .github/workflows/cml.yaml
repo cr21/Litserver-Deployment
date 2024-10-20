@@ -3,7 +3,7 @@ name: Train and Report
 on:
   push:
     branches:
-      - main1  # Adjust this to your default branch
+      - main  # Adjust this to your default branch
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
