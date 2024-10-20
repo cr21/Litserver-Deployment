@@ -123,7 +123,9 @@ jobs:
           echo "## Model Training Results" >> report.md
           echo "### Training Metrics" >> report.md
           echo "![Training Loss](./train_loss_plot.png)" >> report.md
+          echo "![Validation Loss](./val_loss_plot.png)" >> report.md
           echo "![Training Accuracy](./train_acc_plot.png)" >> report.md
+          echo "![Training Accuracy](./val_acc_plot.png)" >> report.md
           
           echo "### Confusion Matrices" >> report.md
           echo "![Training Confusion Matrix](./train_confusion_matrix.png)" >> report.md

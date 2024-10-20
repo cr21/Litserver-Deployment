@@ -43,6 +43,17 @@ plt.legend()
 plt.savefig('train_acc_plot.png')
 plt.close()
 
+# plot validation accuracy
+plt.figure(figsize=(10, 5))
+plt.plot(data['epoch'], data['val/acc'], marker='o', color='b', label='Validation Accuracy')
+plt.title('Validation Accuracy Over Epochs')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.xticks(data['epoch'])
+plt.legend()
+plt.savefig('val_acc_plot.png')
+plt.close()
+
 # Plot Training Loss
 plt.figure(figsize=(10, 5))
 plt.plot(data['epoch'], data['train/loss'], marker='o', color='b', label='Train Loss')
@@ -52,6 +63,17 @@ plt.ylabel('Loss')
 plt.xticks(data['epoch'])
 plt.legend()
 plt.savefig('train_loss_plot.png')
+plt.close()
+
+# val loss
+plt.figure(figsize=(10, 5))
+plt.plot(data['epoch'], data['val/loss'], marker='o', color='b', label='Validation Loss')
+plt.title('Validation Loss Over Epochs')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.xticks(data['epoch'])
+plt.legend()
+plt.savefig('val_loss_plot.png')
 plt.close()
 
 # Create Collage of Predictions
