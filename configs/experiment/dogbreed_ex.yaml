@@ -4,7 +4,7 @@ defaults:
   - override /data: dogbreed
   - override /model: timm_classifier
   - override /callbacks: default
-  - override /trainer: cpu
+  - override /trainer: gpu
   - override /logger: default
 
 # Experiment name

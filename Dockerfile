@@ -1,4 +1,4 @@
-FROM python:3.9.19-slim AS stg1
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS stg1
 
 COPY requirements.txt .
 
@@ -7,12 +7,12 @@ RUN apt-get update -y && apt install -y --no-install-recommends git\
     && pip install --user --no-cache-dir -r requirements.txt && rm -rf /root/.cache/pip
 
 # Stage 2: run application code
-FROM python:3.9.19-slim
+FROM python:3.12-slim-bookworm
 
 COPY --from=stg1 /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
 
-WORKDIR  /opt/mount/
+WORKDIR   /app
 COPY . .
 
 
@@ -20,7 +20,7 @@ COPY . .
 # CMD ["python3", "src/train.py"]
 
 
-### Using UV START
+# ## Using UV START
 # # Build stage
 # FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 
@@ -55,4 +55,4 @@ COPY . .
 # WORKDIR /app
 
 
-### Using UV END
+# ## Using UV END

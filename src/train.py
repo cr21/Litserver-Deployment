@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import sys
 
+import torch
 import rootutils
 
 # Setup the root directory
@@ -18,7 +19,7 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-
+import torch
 from src.utils.logging_utils import setup_logger, task_wrapper
 from lightning.pytorch.loggers import Logger
 
@@ -95,14 +96,19 @@ def train(
     
     for batch in train_loader:
         x, y = batch
-        preds = best_model.predict_step(batch, 0)  # Use the predict_step method
-        y_train_true.extend(y.numpy())
-        y_train_pred.extend(preds.numpy())
-    
+        device  = 'cuda' if torch.cuda.is_available() else 'cpu'
+        x = x.to(device)
+        y = y.to(device)
+        print(device)
+        print(f"{type(x)}")
+        preds = best_model.predict_step((x,y), 0)  # Use the predict_step method
+        y_train_true.extend(y.cpu().numpy())
+        y_train_pred.extend(preds.cpu().numpy())
+
     # Plot confusion matrix for training data
-    plot_confusion_matrix(y_train_true, y_train_pred, 
+    plot_confusion_matrix(y_train_true, y_train_pred,
                           class_names=datamodule.class_names,
-                          title='Confusion Matrix for Training Data', 
+                          title='Confusion Matrix for Training Data',
                           filename='train_confusion_matrix.png')
 
     train_metrics = trainer.callback_metrics
@@ -112,7 +118,7 @@ def train(
 @task_wrapper
 def test(cfg: Optional[DictConfig] = None, trainer: Optional[pl.Trainer] = None, model: Optional[pl.LightningModule] = None, datamodule: Optional[pl.LightningDataModule] = None):
     log.info("Starting testing!")
-    
+
     # Load the best model from the checkpoint
     if trainer.checkpoint_callback and trainer.checkpoint_callback.best_model_path:
         log.info(f"Loading best checkpoint: {trainer.checkpoint_callback.best_model_path}")
@@ -131,14 +137,22 @@ def test(cfg: Optional[DictConfig] = None, trainer: Optional[pl.Trainer] = None,
     
     for batch in test_loader:
         x, y = batch
-        preds = best_model.predict_step(batch, 0)  # Use the predict_step method
-        y_test_true.extend(y.numpy())
-        y_test_pred.extend(preds.numpy())
-    
+
+        device  = 'cuda' if torch.cuda.is_available() else 'cpu'
+        print(f"device",device)
+        print(f"{type(x)}")
+        print(f"{type(y)}")
+        #x = x.to(device)
+        #y = y.to(device)
+
+        preds = best_model.predict_step((x,y), 0)  # Use the predict_step method
+        y_test_true.extend(y.cpu().numpy())
+        y_test_pred.extend(preds.cpu().numpy())
+
     # Plot confusion matrix for test data
-    plot_confusion_matrix(y_test_true, y_test_pred, 
+    plot_confusion_matrix(y_test_true, y_test_pred,
                           class_names=datamodule.class_names,
-                          title='Confusion Matrix for Test Data', 
+                          title='Confusion Matrix for Test Data',
                           filename='test_confusion_matrix.png')
 
     log.info(f"Test metrics:\n{test_metrics}")  
