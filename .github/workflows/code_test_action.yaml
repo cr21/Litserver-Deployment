@@ -86,9 +86,10 @@ jobs:
 
       - name: Set up Docker
         run: |
-          sudo apt-get install -y docker.io
-          sudo systemctl start docker
-          sudo systemctl enable docker
+          curl -fsSL https://get.docker.com -o get-docker.sh  # Download Docker installation script
+          sh get-docker.sh  # Run the installation script
+          # sudo systemctl start docker
+          # sudo systemctl enable docker
 
       - name: Log in to Amazon ECR
         run: |
