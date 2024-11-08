@@ -40,8 +40,8 @@ jobs:
                 mkdir -p ~/.aws && \
                 echo "[default]" > ~/.aws/config && \
                 echo "region=us-east-1" >> ~/.aws/config && \  # Set the region
-                echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials && \
-                echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+                echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials && \
+                echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
 
 
   upload-code-coverage:
@@ -50,6 +50,9 @@ jobs:
     runs-on: ${{ needs.start-runner.outputs.label }}
     env:
       HOME: /home/runner
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Set AWS Access Key ID
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Set AWS Secret Access Key
+      AWS_DEFAULT_REGION: us-east-1 
     steps:
       - name: Hello World
         run: echo 'Hello World! Chirag!'
