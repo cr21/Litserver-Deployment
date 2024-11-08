@@ -23,7 +23,7 @@ jobs:
         with:
           mode: start
           github-token: ${{ secrets.REPO_TOKEN }}
-          ec2-image-id: ami-0299e4cd39a60e428
+          ec2-image-id: ami-0bd074dba8f44287a
           ec2-instance-type: t3.xlarge
           subnet-id: subnet-0501494307f30f3bc
           security-group-id: sg-0b69ab6ebf8a1e597
@@ -97,7 +97,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Use your AWS access key
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Use your AWS secret key
           aws-region: us-east-1  # Specify your AWS region
-          
+
       - name: Log in to Amazon ECR
         run: |
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 575108919357.dkr.ecr.us-east-1.amazonaws.com
