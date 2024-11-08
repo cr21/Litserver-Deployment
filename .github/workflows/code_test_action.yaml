@@ -72,6 +72,9 @@ jobs:
       - upload-code-coverage
     runs-on: ${{ needs.start-runner.outputs.label }}
     steps:
+      - name: Install unzip utility
+        run: |
+          sudo apt-get install -y unzip
       - name: Set up AWS CLI
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"  # Download AWS CLI
