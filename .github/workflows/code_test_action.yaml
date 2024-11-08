@@ -28,14 +28,21 @@ jobs:
           subnet-id: subnet-0501494307f30f3bc
           security-group-id: sg-0b69ab6ebf8a1e597
           pre-runner-script: |
-                 sudo apt update -y && \ 
-                 sudo apt-get install -y unzip
-                 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"  # Download AWS CLI
-                 unzip awscliv2.zip  # Unzip the downloaded file
-                 sudo ./aws/install  # Install AWS CLI
-                 sudo ./aws/install --update
-                 curl -fsSL https://get.docker.com -o get-docker.sh  # Download Docker installation script
-                 sh get-docker.sh  # Run the installation script
+                sudo apt update -y && \ 
+                sudo apt-get install -y unzip
+                curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"  # Download AWS CLI
+                unzip awscliv2.zip  # Unzip the downloaded file
+                sudo ./aws/install  # Install AWS CLI
+                sudo ./aws/install --update
+                curl -fsSL https://get.docker.com -o get-docker.sh  # Download Docker installation script
+                sh get-docker.sh  # Run the installation script
+                # Set up AWS credentials and region
+                mkdir -p ~/.aws && \
+                echo "[default]" > ~/.aws/config && \
+                echo "region=us-east-1" >> ~/.aws/config && \  # Set the region
+                echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials && \
+                echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+
 
   upload-code-coverage:
     name: Do the job on the runner
@@ -46,6 +53,8 @@ jobs:
     steps:
       - name: Hello World
         run: echo 'Hello World! Chirag!'
+      - name: AWS check if aws credentilas are set up correctly or not
+        run: aws s3 ls
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Install uv

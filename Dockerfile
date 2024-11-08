@@ -30,6 +30,8 @@ ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 WORKDIR /app
 
 ADD . /app
+
+RUN chmod +x /app/start_script.sh
 # Install dependencies
 RUN --mount=type=cache,target=/root/.cache/uv \
 	--mount=type=bind,source=uv.lock,target=uv.lock \

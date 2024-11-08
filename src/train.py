@@ -22,6 +22,7 @@ import numpy as np
 import torch
 from src.utils.logging_utils import setup_logger, task_wrapper
 from lightning.pytorch.loggers import Logger
+from src.utils.s3_utility import upload_file_to_s3
 
 # Set up logging
 log = logging.getLogger(__name__)
@@ -80,10 +81,13 @@ def train(
 ):
     log.info("Starting training!")
     trainer.fit(model, datamodule)
-
+    
     # Load the best model from the checkpoint
     if trainer.checkpoint_callback and trainer.checkpoint_callback.best_model_path:
         log.info(f"Loading best model from checkpoint: {trainer.checkpoint_callback.best_model_path}")
+        s3_model_save_location_path = cfg.s3_model_save_location
+        upload_file_to_s3(trainer.checkpoint_callback.best_model_path, s3_model_save_location_path)
+        print(f"Model saved to s3 bucket {s3_model_save_location_path}")
         best_model = model.__class__.load_from_checkpoint(trainer.checkpoint_callback.best_model_path)
     else:
         log.warning("No checkpoint found! Using current model weights.")
@@ -139,12 +143,6 @@ def test(cfg: Optional[DictConfig] = None, trainer: Optional[pl.Trainer] = None,
         x, y = batch
 
         device  = 'cuda' if torch.cuda.is_available() else 'cpu'
-        print(f"device",device)
-        print(f"{type(x)}")
-        print(f"{type(y)}")
-        #x = x.to(device)
-        #y = y.to(device)
-
         preds = best_model.predict_step((x,y), 0)  # Use the predict_step method
         y_test_true.extend(y.cpu().numpy())
         y_test_pred.extend(preds.cpu().numpy())

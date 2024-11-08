@@ -3,7 +3,7 @@ from pathlib import Path
 import random
 from typing import List, Tuple
 import rootutils
-
+import torch
 # Setup the root directory
 root = rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 print(f"Project root: {root}")
@@ -17,11 +17,13 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import logging
 from src.utils.logging_utils import setup_logger
+from src.utils.s3_utility import download_model_from_s3, remove_files, upload_file_to_s3
 
 # Set up logging
 log = logging.getLogger(__name__)
 
 def pred_and_plot_image(
+    cfg:DictConfig,
     model: pl.LightningModule,
     image_path: str,
     results_dir: str,
@@ -29,6 +31,7 @@ def pred_and_plot_image(
     image_size: Tuple[int, int] = (224, 224),
     transform=None
 ):
+    device  = 'cuda' if torch.cuda.is_available() else 'cpu'
     img = Image.open(image_path).convert("RGB")
     if transform:
         target_image = transform(img)
@@ -37,7 +40,7 @@ def pred_and_plot_image(
     model.eval()
     with torch.inference_mode():
         target_image = target_image.unsqueeze(dim=0)
-        target_image_pred = model(target_image)
+        target_image_pred = model(target_image.to(device))
 
     target_image_pred_probs = torch.softmax(target_image_pred, dim=1)
     target_image_pred_label = torch.argmax(target_image_pred_probs, dim=1)
@@ -50,6 +53,10 @@ def pred_and_plot_image(
     plt.axis(False)
     result_path = Path(results_dir) / f"{Path(image_path).stem}_{class_names[target_image_pred_label.item()]}.png"
     plt.savefig(result_path)
+    try:
+        upload_file_to_s3(result_path, cfg.inference.s3_prediction_bucket_location)
+    except Exception as exp:
+        print(f"Trying to store prediction image to s3 location result_path {result_path} bucket location {cfg.inference.s3_prediction_bucket_location}")
     plt.close()
 
 @hydra.main(version_base=None, config_path="../configs", config_name="infer")
@@ -57,14 +64,16 @@ def main(cfg: DictConfig):
     log_dir = Path(cfg.paths.log_dir)
     # set up logger
     setup_logger(log_dir/"inference.log")
-
+    print(f"checkpoint path ", cfg.ckpt_path)
     # Set up paths
     ckpt_path = Path(cfg.ckpt_path)
     save_dir = Path(cfg.save_dir)
     data_dir = Path(cfg.data_dir)
     results_dir = save_dir 
     results_dir.mkdir(parents=True, exist_ok=True)
-
+    remove_files(os.path.dirname(cfg.ckpt_path),pattern="*.ckpt")
+    download_model_from_s3(cfg.ckpt_path, cfg.inference.s3_model_bucket_location, cfg.inference.s3_model_bucket_folder_location)
+    print(f"ckptpath {ckpt_path}")
     # Load model
     log.info(f"Loading model from {ckpt_path}")
     model = hydra.utils.instantiate(cfg.model)
@@ -85,8 +94,10 @@ def main(cfg: DictConfig):
     print("Total Images: ", len(inference_image_path_list))
     # Perform inference
     log.info(f"Performing inference on {cfg.num_samples} samples")
+    remove_files(os.path.dirname(cfg.save_dir),pattern="*.png")
     for image_path in test_image_path_samples:
         pred_and_plot_image(
+            cfg=cfg,
             model=model,
             image_path=str(image_path),
             results_dir=results_dir,
