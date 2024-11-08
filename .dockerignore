@@ -1,0 +1,17 @@
+.venv/
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.log
+*.git
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.log
+*.git
+*.venv
