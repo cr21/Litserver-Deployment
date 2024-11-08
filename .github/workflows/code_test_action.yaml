@@ -5,7 +5,7 @@ on:
       - aws_demo 
 jobs:
   start-runner:
-    name: Start self-hosted EC2 runner
+    name: Start self-hosted EC2 runner for checking test coverage
     runs-on: ubuntu-latest
     outputs:
       label: ${{ steps.start-ec2-runner.outputs.label }}
@@ -27,7 +27,7 @@ jobs:
           ec2-instance-type: t3.xlarge
           subnet-id: subnet-0501494307f30f3bc
           security-group-id: sg-0b69ab6ebf8a1e597
-  do-the-job:
+  upload-code-coverage:
     name: Do the job on the runner
     needs: start-runner
     runs-on: ${{ needs.start-runner.outputs.label }}
@@ -41,36 +41,59 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v3
         with:
-          version: "0.4.22"
+          version: "0.4.22"  # Pin to a specific version of uv
 
       - name: Set up Python 3.12
-        run: uv python install --version 3.12
+        run: uv python install --version 3.12 # Install Python 3.12 with uv
 
       - name: Install dependencies
         run: |
           UV_INDEX_URL=https://download.pytorch.org/whl/cpu \
           UV_EXTRA_INDEX_URL=https://pypi.org/simple \
-          uv sync --all-extras --dev
+          uv sync --all-extras --dev  # Install dependencies with uv
 
       - name: Run tests with coverage
         run: |
-          uv run coverage run -m pytest || true
-          uv run coverage xml -o coverage.xml
+          uv run coverage run -m pytest  || true  # Run tests with coverage
+          uv run coverage xml -o coverage.xml  # Generate coverage report in XML format
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v4 # Update to the latest version
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}  # Use the token from secrets
+          files: ./coverage.xml  # Specify the coverage report file
           fail_ci_if_error: true
           slug: ${{ github.repository }}
+
+  build-and-push-docker:
+    name: Build and Push Docker Image
+    needs: upload-code-coverage
+    runs-on: ${{ needs.start-runner.outputs.label }}
+    steps:
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 575108919357.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Build Docker image
+        run: |
+          docker build -t cr/emlo-docker-plt:latest .  # Adjust the path to your Dockerfile if necessary
+
+      - name: Tag Docker image
+        run: |
+          docker tag cr/emlo-docker-plt:latest 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
+
   stop-runner:
     name: Stop self-hosted EC2 runner
     needs:
-      - start-runner
-      - do-the-job
+      - start-runner # required to get output from the start-runner job
+      - upload-code-coverage # required to wait when the main job is done
+      - build-and-push-docker # required to wait for the Docker build and push job
     runs-on: ubuntu-latest
-    if: ${{ always() }}
+    if: ${{ always() }} # required to stop the runner even if the error happened in the previous jobs
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
