@@ -75,7 +75,8 @@ jobs:
       - name: Set up AWS CLI
         run: |
           sudo apt-get update
-          sudo apt-get install -y awscli
+          sudo apt-get install -y python3 python3-pip
+          pip3 install awscli --upgrade --user
 
       - name: Set up Docker
         run: |
