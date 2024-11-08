@@ -23,7 +23,7 @@ jobs:
         with:
           mode: start
           github-token: ${{ secrets.REPO_TOKEN }}
-          ec2-image-id: ami-0109381ef533665b8
+          ec2-image-id: ami-0299e4cd39a60e428
           ec2-instance-type: t3.xlarge
           subnet-id: subnet-0501494307f30f3bc
           security-group-id: sg-0b69ab6ebf8a1e597
@@ -35,7 +35,7 @@ jobs:
       HOME: /home/runner
     steps:
       - name: Hello World
-        run: echo 'Hello World!'
+        run: echo 'Hello World! Chirag'
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Install uv
