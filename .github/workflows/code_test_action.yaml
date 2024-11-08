@@ -1,0 +1,86 @@
+name: do-the-job
+on:
+  push:
+    branches:
+      - aws_demo 
+jobs:
+  start-runner:
+    name: Start self-hosted EC2 runner
+    runs-on: ubuntu-latest
+    outputs:
+      label: ${{ steps.start-ec2-runner.outputs.label }}
+      ec2-instance-id: ${{ steps.start-ec2-runner.outputs.ec2-instance-id }}
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Start EC2 runner
+        id: start-ec2-runner
+        uses: machulav/ec2-github-runner@v2
+        with:
+          mode: start
+          github-token: ${{ secrets.REPO_TOKEN }}
+          ec2-image-id: ami-0109381ef533665b8
+          ec2-instance-type: t3.xlarge
+          subnet-id: subnet-0501494307f30f3bc
+          security-group-id: sg-0b69ab6ebf8a1e597
+  do-the-job:
+    name: Do the job on the runner
+    needs: start-runner # required to start the main job when the runner is ready
+    runs-on: ${{ needs.start-runner.outputs.label }} # run the job on the newly created runner
+    steps:
+      - name: Hello World
+        run: echo 'Hello World!'
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.4.22"  # Pin to a specific version of uv
+
+      - name: Set up Python 3.12
+        run: uv python install --version 3.12 # Install Python 3.12 with uv
+
+      - name: Install dependencies
+        run: |
+          UV_INDEX_URL=https://download.pytorch.org/whl/cpu \
+          UV_EXTRA_INDEX_URL=https://pypi.org/simple \
+          uv sync --all-extras --dev  # Install dependencies with uv
+
+      - name: Run tests with coverage
+        run: |
+          uv run coverage run -m pytest  || true  # Run tests with coverage
+          uv run coverage xml -o coverage.xml  # Generate coverage report in XML format
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4 # Update to the latest version
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}  # Use the token from secrets
+          files: ./coverage.xml  # Specify the coverage report file
+          fail_ci_if_error: true
+          #slug: cr21/pytorch_lightning_hydra_template
+          slug: ${{ github.repository }}
+  stop-runner:
+    name: Stop self-hosted EC2 runner
+    needs:
+      - start-runner # required to get output from the start-runner job
+      - do-the-job # required to wait when the main job is done
+    runs-on: ubuntu-latest
+    if: ${{ always() }} # required to stop the runner even if the error happened in the previous jobs
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Stop EC2 runner
+        uses: machulav/ec2-github-runner@v2
+        with:
+          mode: stop
+          github-token: ${{ secrets.REPO_TOKEN }}
+          label: ${{ needs.start-runner.outputs.label }}
+          ec2-instance-id: ${{ needs.start-runner.outputs.ec2-instance-id }}
