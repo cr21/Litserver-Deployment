@@ -1,4 +1,4 @@
-name: do-the-job
+name: code-test-workflow
 on:
   push:
     branches:

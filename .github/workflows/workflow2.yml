@@ -1,8 +1,10 @@
-name: do-the-job
+name: CI Workflow
+
 on:
   push:
     branches:
-      - aws_demo1
+      - main1
+
 jobs:
   start-runner:
     name: Start self-hosted EC2 runner
@@ -24,23 +26,41 @@ jobs:
           mode: start
           github-token: ${{ secrets.REPO_TOKEN }}
           ec2-image-id: ami-0547743d1c688ef46
-          ec2-instance-type: t2.micro
+          ec2-instance-type: g4dn.xlarge  # Ensure you are using a GPU instance
           subnet-id: subnet-0501494307f30f3bc
           security-group-id: sg-037ed81884a32847e
-  do-the-job:
-    name: Do the job on the runner
-    needs: start-runner # required to start the main job when the runner is ready
-    runs-on: ${{ needs.start-runner.outputs.label }} # run the job on the newly created runner
+
+  run-scripts:
+    name: Run Scripts on EC2 Runner
+    needs: start-runner
+    runs-on: ${{ needs.start-runner.outputs.label }}
     steps:
-      - name: Hello World
-        run: echo 'Hello World!'
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 575108919357.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Pull Docker image
+        run: |
+          docker pull 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-image:latest .
+
+      - name: Run Docker container and execute scripts
+        run: |
+          docker run --gpus all --env GITHUB_SHA=${{ github.sha }} my-image:latest bash -c "python src/test_coverage.py && python src/train_model.py"
+          
   stop-runner:
     name: Stop self-hosted EC2 runner
     needs:
-      - start-runner # required to get output from the start-runner job
-      - do-the-job # required to wait when the main job is done
+      - start-runner
+      - run-scripts
     runs-on: ubuntu-latest
-    if: ${{ always() }} # required to stop the runner even if the error happened in the previous jobs
+    if: ${{ always() }}
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
