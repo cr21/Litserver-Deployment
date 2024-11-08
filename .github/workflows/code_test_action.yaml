@@ -102,17 +102,17 @@ jobs:
         run: |
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 575108919357.dkr.ecr.us-east-1.amazonaws.com
 
-      - name: Build Docker image
-        run: |
-          docker build -t cr/emlo-docker-plt:latest .  # Adjust the path to your Dockerfile if necessary
+      # - name: Build Docker image
+      #   run: |
+      #     docker build -t cr/emlo-docker-plt:latest .  # Adjust the path to your Dockerfile if necessary
 
-      - name: Tag Docker image
-        run: |
-          docker tag cr/emlo-docker-plt:latest 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
+      # - name: Tag Docker image
+      #   run: |
+      #     docker tag cr/emlo-docker-plt:latest 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
 
       - name: Push Docker image to ECR
         run: |
-          docker push 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
+          docker pull 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
 
   stop-runner:
     name: Stop self-hosted EC2 runner
