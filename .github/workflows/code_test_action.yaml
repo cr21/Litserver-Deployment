@@ -35,7 +35,7 @@ jobs:
       HOME: /home/runner
     steps:
       - name: Hello World
-        run: echo 'Hello World! Chirag'
+        run: echo 'Hello World! Chirag!'
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Install uv
