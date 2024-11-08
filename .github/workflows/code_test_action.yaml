@@ -104,6 +104,9 @@ jobs:
 
       - name: Build Docker image
         run: |
+          df -h
+          export DOCKER_BUILDKIT=1
+          docker system prune -a 
           docker build -t cr/emlo-docker-plt:latest .  # Adjust the path to your Dockerfile if necessary
 
       - name: Tag Docker image
