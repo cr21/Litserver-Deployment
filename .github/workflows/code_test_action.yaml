@@ -91,7 +91,6 @@ jobs:
     needs:
       - start-runner # required to get output from the start-runner job
       - upload-code-coverage # required to wait when the main job is done
-      - build-and-push-docker # required to wait for the Docker build and push job
     runs-on: ubuntu-latest
     if: ${{ always() }} # required to stop the runner even if the error happened in the previous jobs
     steps:
