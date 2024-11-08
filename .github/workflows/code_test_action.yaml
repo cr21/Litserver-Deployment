@@ -33,7 +33,7 @@ jobs:
     runs-on: ${{ needs.start-runner.outputs.label }} # run the job on the newly created runner
     steps:
       - name: Hello World
-        run: echo 'Hello World!'
+        run: echo 'Hello World! Chirag'
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Install uv
