@@ -255,4 +255,24 @@ jobs:
           575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest \
           -c "sh start_script.sh"
 
+  stop-last-runner:
+    name: Stop last EC2 runner
+    needs: pull-docker-and-train  # Ensure this runs after the Docker job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Specify your AWS region
+
+      - name: Stop EC2 runner
+        uses: machulav/ec2-github-runner@v2
+        with:
+          mode: stop
+          github-token: ${{ secrets.REPO_TOKEN }}
+          label: ${{ needs.start-training-runner.outputs.label }}  # Use the label from the training runner
+          ec2-instance-id: ${{ needs.start-training-runner.outputs.ec2-instance-id }}  # Use the instance ID from the training runner
+
 
