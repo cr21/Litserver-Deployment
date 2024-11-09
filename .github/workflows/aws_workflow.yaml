@@ -2,7 +2,7 @@ name: code-aws-test-workflow
 on:
   push:
     branches:
-      - aws_demo1
+      - aws_demo
 jobs:
   start-runner:
     name: Start self-hosted EC2 runner for checking test coverage
@@ -23,10 +23,10 @@ jobs:
         with:
           mode: start
           github-token: ${{ secrets.REPO_TOKEN }}
-          ec2-image-id: ami-0097b0cba07ae1dca
+          ec2-image-id: ami-0e344015613783934
           ec2-instance-type: t3.xlarge
-          subnet-id: subnet-0501494307f30f3bc
-          security-group-id: sg-0b69ab6ebf8a1e597
+          subnet-id: subnet-0fbb0a4e45e210015
+          security-group-id: sg-0326e5442e2817762
           pre-runner-script: |
                 sudo apt update -y && \ 
                 sudo apt-get install -y unzip
@@ -180,25 +180,25 @@ jobs:
         with:
           mode: start
           github-token: ${{ secrets.REPO_TOKEN }}
-          ec2-image-id: ami-029b2aee6a7950fe3
-          ec2-instance-type: g4dn.xlarge
-          subnet-id: subnet-04e7dada262d6a4ef
-          security-group-id: sg-08e5029a7869a433d
-          # pre-runner-script: |
-          #       sudo apt update -y && \ 
-          #       sudo apt-get install -y unzip
-          #       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"  # Download AWS CLI
-          #       unzip awscliv2.zip  # Unzip the downloaded file
-          #       sudo ./aws/install  # Install AWS CLI
-          #       sudo ./aws/install --update
-          #       curl -fsSL https://get.docker.com -o get-docker.sh  # Download Docker installation script
-          #       sh get-docker.sh  # Run the installation script
-          #       # Set up AWS credentials and region
-          #       # mkdir -p ~/.aws && \
-          #       # echo "[default]" > ~/.aws/config && \
-          #       # echo "region=us-east-1" >> ~/.aws/config && \  # Set the region
-          #       # echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials && \
-          #       # echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+          ec2-image-id: ami-0e344015613783934
+          ec2-instance-type: t3.xlarge
+          subnet-id: subnet-0fbb0a4e45e210015
+          security-group-id: sg-0326e5442e2817762
+          pre-runner-script: |
+                # sudo apt update -y && \ 
+                # sudo apt-get install -y unzip
+                # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"  # Download AWS CLI
+                # unzip awscliv2.zip  # Unzip the downloaded file
+                # sudo ./aws/install  # Install AWS CLI
+                # sudo ./aws/install --update
+                # curl -fsSL https://get.docker.com -o get-docker.sh  # Download Docker installation script
+                # sh get-docker.sh  # Run the installation script
+                # Set up AWS credentials and region
+                # mkdir -p ~/.aws && \
+                # echo "[default]" > ~/.aws/config && \
+                # echo "region=us-east-1" >> ~/.aws/config && \  # Set the region
+                # echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials && \
+                # echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
   pull-docker-and-train:
     name: Build and pull Docker Image
     needs: 
@@ -231,7 +231,7 @@ jobs:
 
       - name: Log in to Amazon ECR
         run: |
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 575108919357.dkr.ecr.us-east-1.amazonaws.com
+          aws ecr get-login-password --region us-east-1 |  docker login --username AWS --password-stdin 575108919357.dkr.ecr.us-east-1.amazonaws.com
 
       # - name: Build Docker image
       #   run: |
@@ -246,10 +246,10 @@ jobs:
 
       - name: Pull Docker image to ECR
         run: |
-          docker pull 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
+           docker pull 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
       - name: RUN Dokcer image
         run: |
-          docker run --gpus all \
+          docker run  \
           --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}  \
           -it --entrypoint /bin/bash \
           575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest \
