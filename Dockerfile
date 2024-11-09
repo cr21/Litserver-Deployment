@@ -27,11 +27,12 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 # ENV UV_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cpu
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
+RUN apt-get update -y && apt install -y --no-install-recommends git && apt install -y vim
+
 WORKDIR /app
 
 ADD . /app
 
-RUN chmod +x /app/start_script.sh
 # Install dependencies
 RUN --mount=type=cache,target=/root/.cache/uv \
 	--mount=type=bind,source=uv.lock,target=uv.lock \

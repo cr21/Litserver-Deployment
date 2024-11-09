@@ -47,3 +47,4 @@ callbacks:
 tags: ["birddata", "classification", "vit_tiny_patch16_224"]
 
 s3_model_save_location: "pytorch-model-emlov4"
+ckpt_path: ${oc.env:PROJECT_ROOT}/checkpoints/${name}/best_model.ckpt

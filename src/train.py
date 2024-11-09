@@ -22,7 +22,7 @@ import numpy as np
 import torch
 from src.utils.logging_utils import setup_logger, task_wrapper
 from lightning.pytorch.loggers import Logger
-from src.utils.s3_utility import upload_file_to_s3
+from src.utils.s3_utility import upload_file_to_s3, remove_files
 
 # Set up logging
 log = logging.getLogger(__name__)
@@ -179,6 +179,7 @@ def main(cfg: DictConfig):
     # Create trainer
     log.info(f"Instantiating trainer <{cfg.trainer._target_}>")
     trainer: pl.Trainer = hydra.utils.instantiate(cfg.trainer, callbacks=callbacks, logger=loggers)
+    remove_files(os.path.dirname(cfg.ckpt_path),pattern="*.ckpt")
     # Train the model
     if cfg.get("train"):
         train(cfg, trainer, model, datamodule)

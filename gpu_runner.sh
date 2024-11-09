@@ -22,8 +22,9 @@ sudo systemctl restart docker
 
 docker run --gpus all \
     --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}  \
-     -it --entrypoint /bin/bash \
+    -it --entrypoint /bin/bash \
     575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest \
-    -c "start_script.sh"
+    -c "sh start_script.sh"
 
-# docker run --gpus all  -it --entrypoint  /bin/bash 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
+# docker run --gpus all  -it  -w /app  --entrypoint   /bin/bash 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest -c "sh start_script.sh"
+
