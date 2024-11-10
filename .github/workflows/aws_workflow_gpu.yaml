@@ -2,7 +2,7 @@ name: aws-test-train
 on:
   push:
     branches:
-      - aws_demo_gpu
+      - aws_demo
 jobs:
   start-runner:
     name: Start self-hosted EC2 runner for checking test coverage
@@ -180,25 +180,25 @@ jobs:
         with:
           mode: start
           github-token: ${{ secrets.REPO_TOKEN }}
-          ec2-image-id: ami-0e344015613783934
-          ec2-instance-type: t3.xlarge
-          subnet-id: subnet-0fbb0a4e45e210015
-          security-group-id: sg-0326e5442e2817762
-          pre-runner-script: |
-                # sudo apt update -y && \ 
-                # sudo apt-get install -y unzip
-                # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"  # Download AWS CLI
-                # unzip awscliv2.zip  # Unzip the downloaded file
-                # sudo ./aws/install  # Install AWS CLI
-                # sudo ./aws/install --update
-                # curl -fsSL https://get.docker.com -o get-docker.sh  # Download Docker installation script
-                # sh get-docker.sh  # Run the installation script
-                # Set up AWS credentials and region
-                # mkdir -p ~/.aws && \
-                # echo "[default]" > ~/.aws/config && \
-                # echo "region=us-east-1" >> ~/.aws/config && \  # Set the region
-                # echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials && \
-                # echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+          ec2-image-id: ami-01cec99656d8fdb37
+          ec2-instance-type: g4dn.xlarge
+          subnet-id: subnet-04e7dada262d6a4ef
+          security-group-id: sg-0c79ce648d15a7c71
+          # pre-runner-script: |
+          #       # sudo apt update -y && \ 
+          #       # sudo apt-get install -y unzip
+          #       # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"  # Download AWS CLI
+          #       # unzip awscliv2.zip  # Unzip the downloaded file
+          #       # sudo ./aws/install  # Install AWS CLI
+          #       # sudo ./aws/install --update
+          #       # curl -fsSL https://get.docker.com -o get-docker.sh  # Download Docker installation script
+          #       # sh get-docker.sh  # Run the installation script
+          #       # Set up AWS credentials and region
+          #       # mkdir -p ~/.aws && \
+          #       # echo "[default]" > ~/.aws/config && \
+          #       # echo "region=us-east-1" >> ~/.aws/config && \  # Set the region
+          #       # echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials && \
+          #       # echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
   pull-docker-and-train:
     name: Build and pull Docker Image
     needs: 
