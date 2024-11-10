@@ -1,4 +1,4 @@
-name: code-aws-test-workflow
+name: aws-test-train
 on:
   push:
     branches:
@@ -45,7 +45,7 @@ jobs:
 
 
   upload-code-coverage:
-    name: Do the job on the runner
+    name: run tests and upload test coverage
     needs: start-runner
     runs-on: ${{ needs.start-runner.outputs.label }}
     env:
