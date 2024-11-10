@@ -257,7 +257,9 @@ jobs:
 
   stop-last-runner:
     name: Stop last EC2 runner
-    needs: pull-docker-and-train  # Ensure this runs after the Docker job
+    needs: 
+      - start-training-runner
+      - pull-docker-and-train  # Ensure this runs after the Docker job
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
@@ -274,5 +276,3 @@ jobs:
           github-token: ${{ secrets.REPO_TOKEN }}
           label: ${{ needs.start-training-runner.outputs.label }}  # Use the label from the training runner
           ec2-instance-id: ${{ needs.start-training-runner.outputs.ec2-instance-id }}  # Use the instance ID from the training runner
-
-
