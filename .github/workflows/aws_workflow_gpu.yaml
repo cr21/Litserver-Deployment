@@ -2,7 +2,7 @@ name: aws-test-train
 on:
   push:
     branches:
-      - aws_demo
+      - aws_demo1
 jobs:
   start-runner:
     name: Start self-hosted EC2 runner for checking test coverage
@@ -249,7 +249,7 @@ jobs:
            docker pull 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest
       - name: RUN Dokcer image
         run: |
-          docker run  \
+          docker run  --gpus all \
           --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}  \
           --entrypoint /bin/bash \
           575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/emlo-docker-plt:latest \
