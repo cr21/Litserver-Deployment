@@ -92,7 +92,8 @@ def train(
     else:
         log.warning("No checkpoint found! Using current model weights.")
         best_model = model
-
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    best_model = best_model.to(device)  # Move model to the appropriate device  
     # Get training predictions and true labels
     train_loader = datamodule.train_dataloader()
     y_train_true = []
@@ -103,8 +104,6 @@ def train(
         device  = 'cuda' if torch.cuda.is_available() else 'cpu'
         x = x.to(device)
         y = y.to(device)
-        print(device)
-        print(f"{type(x)}")
         preds = best_model.predict_step((x,y), 0)  # Use the predict_step method
         y_train_true.extend(y.cpu().numpy())
         y_train_pred.extend(preds.cpu().numpy())

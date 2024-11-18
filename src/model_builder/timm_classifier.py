@@ -9,6 +9,8 @@ def get_model(model_name, num_classes, pretrained=True):
     """
     Create base model with pretrained weights from ImageNet if specified.
     """
+    print(f"pretrained {pretrained} => model_name {model_name} =>  num_classes {num_classes}")
+    print("#"*200)
     model = timm.create_model(model_name, pretrained=pretrained)
     model.reset_classifier(num_classes)
     return model

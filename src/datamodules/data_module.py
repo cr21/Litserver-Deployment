@@ -27,8 +27,12 @@ class GenericDataModule(L.LightningDataModule):
         
         # Default transformations
         self.default_train_transform = transforms.Compose([
-            transforms.RandomResizedCrop(224),
-            transforms.RandomHorizontalFlip(),
+            # transforms.TrivialAugmentWide(num_magnitude_bins=31),
+            # # transforms.RandomResizedCrop(224),
+            # # transforms.RandomHorizontalFlip(),
+            # transforms.ToTensor(),
+            transforms.Resize((224, 224)),
+            transforms.TrivialAugmentWide(num_magnitude_bins=31), # how intense 
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])

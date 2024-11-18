@@ -745,6 +745,7 @@ dependencies = [
     { name = "rootutils" },
     { name = "scikit-learn" },
     { name = "seaborn" },
+    { name = "split-folders" },
     { name = "tensorboard" },
     { name = "timm" },
     { name = "torch" },
@@ -774,6 +775,7 @@ requires-dist = [
     { name = "rootutils", specifier = ">=1.0.7" },
     { name = "scikit-learn", specifier = ">=1.5.2" },
     { name = "seaborn", specifier = ">=0.13.2" },
+    { name = "split-folders", specifier = ">=0.5.1" },
     { name = "tensorboard", specifier = ">=2.18.0" },
     { name = "timm", specifier = ">=1.0.9" },
     { name = "torch", specifier = "==2.2.2" },
@@ -2453,6 +2455,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/88/04/b5bf6d21dc4041000ccba7eb17dd3055feb237e7ffc2c20d3fae3af62baa/smmap-5.0.1.tar.gz", hash = "sha256:dceeb6c0028fdb6734471eb07c0cd2aae706ccaecab45965ee83f11c8d3b1f62", size = 22291 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a7/a5/10f97f73544edcdef54409f1d839f6049a0d79df68adbc1ceb24d1aaca42/smmap-5.0.1-py3-none-any.whl", hash = "sha256:e6d8668fa5f93e706934a62d7b4db19c8d9eb8cf2adbb75ef1b675aa332b69da", size = 24282 },
+]
+
+[[package]]
+name = "split-folders"
+version = "0.5.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a7/4c/32d2d49b82ea5baf0ff1a55de88c7fb8a0bf2aab02763c8501b2a51bf55f/split_folders-0.5.1.tar.gz", hash = "sha256:7127a226b90e00fa86cda4451fe015c6f3755bc3d627064adb9c5209fc8280f6", size = 7949 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b6/d5/307d63c03356bad6e141d8718d3f4116f51bd9c4b09e2614ffcee1f3c6fd/split_folders-0.5.1-py3-none-any.whl", hash = "sha256:cb010e00f34d247b8e8bbfd6cfe527f871361d8524ed54734924e7efd261801f", size = 8388 },
 ]
 
 [[package]]
