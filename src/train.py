@@ -92,27 +92,27 @@ def train(
     else:
         log.warning("No checkpoint found! Using current model weights.")
         best_model = model
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    best_model = best_model.to(device)  # Move model to the appropriate device  
+    # device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    # best_model = best_model.to(device)  # Move model to the appropriate device  
     # Get training predictions and true labels
-    train_loader = datamodule.train_dataloader()
-    y_train_true = []
-    y_train_pred = []
+    # train_loader = datamodule.train_dataloader()
+    # y_train_true = []
+    # y_train_pred = []
     
-    for batch in train_loader:
-        x, y = batch
-        device  = 'cuda' if torch.cuda.is_available() else 'cpu'
-        x = x.to(device)
-        y = y.to(device)
-        preds = best_model.predict_step((x,y), 0)  # Use the predict_step method
-        y_train_true.extend(y.cpu().numpy())
-        y_train_pred.extend(preds.cpu().numpy())
+    # for batch in train_loader:
+    #     x, y = batch
+    #     device  = 'cuda' if torch.cuda.is_available() else 'cpu'
+    #     x = x.to(device)
+    #     y = y.to(device)
+    #     preds = best_model.predict_step((x,y), 0)  # Use the predict_step method
+    #     y_train_true.extend(y.cpu().numpy())
+    #     y_train_pred.extend(preds.cpu().numpy())
 
-    # Plot confusion matrix for training data
-    plot_confusion_matrix(y_train_true, y_train_pred,
-                          class_names=datamodule.class_names,
-                          title='Confusion Matrix for Training Data',
-                          filename='train_confusion_matrix.png')
+    # # Plot confusion matrix for training data
+    # plot_confusion_matrix(y_train_true, y_train_pred,
+    #                       class_names=datamodule.class_names,
+    #                       title='Confusion Matrix for Training Data',
+    #                       filename='train_confusion_matrix.png')
 
     train_metrics = trainer.callback_metrics
     log.info(f"Training metrics:\n{train_metrics}")
@@ -137,14 +137,14 @@ def test(cfg: Optional[DictConfig] = None, trainer: Optional[pl.Trainer] = None,
     test_loader = datamodule.test_dataloader()
     y_test_true = []
     y_test_pred = []
-    
-    for batch in test_loader:
-        x, y = batch
+    with torch.no_grad():
+        for batch in test_loader:
+            x, y = batch
 
-        device  = 'cuda' if torch.cuda.is_available() else 'cpu'
-        preds = best_model.predict_step((x,y), 0)  # Use the predict_step method
-        y_test_true.extend(y.cpu().numpy())
-        y_test_pred.extend(preds.cpu().numpy())
+            device  = 'cuda' if torch.cuda.is_available() else 'cpu'
+            preds = best_model.predict_step((x,y), 0)  # Use the predict_step method
+            y_test_true.extend(y.cpu().numpy())
+            y_test_pred.extend(preds.cpu().numpy())
 
     # Plot confusion matrix for test data
     plot_confusion_matrix(y_test_true, y_test_pred,

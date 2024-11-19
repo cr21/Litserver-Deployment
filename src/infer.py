@@ -39,7 +39,7 @@ def pred_and_plot_image(
         target_image = transforms.Compose([transforms.Resize(image_size),transforms.ToTensor(),])(img)
     model.to(device)
     model.eval()
-    with torch.inference_mode():
+    with torch.no_grad():
         target_image = target_image.unsqueeze(dim=0)
         target_image_pred = model(target_image.to(device))
 
