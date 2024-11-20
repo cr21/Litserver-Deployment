@@ -13,24 +13,27 @@ name: food_100_classification
 seed: 42
 
 data:
-  batch_size: 16
+  batch_size: 64
   num_workers: 4
   pin_memory: True
 
 # Increase the number of epochs for better training
 trainer:
   min_epochs: 1
-  max_epochs: 1
+  max_epochs: 20
   gradient_clip_val: 1.0
   precision: 16
+  accelerator: 'gpu'
+  devices: 1
+  accumulate_grad_batches: 2
 
 # Adjust learning rate and batch size
 model:
   _target_: src.model_builder.timm_classifier.TimmClassifier
-  base_model: efficientnet_b3.ra2_in1k
+  base_model: efficientnet_b0
   num_classes: 101
   pretrained: true
-  learning_rate: 5e-4
+  learning_rate: 1e-3
   weight_decay: 1e-4
   patience: 4
   factor: 0.25
@@ -39,8 +42,7 @@ model:
 # Early stopping configuration
 callbacks:
   early_stopping:
-    #patience: 10
-    patience: 7
+    patience: 5
     monitor: "val/acc"
     mode: "max"
     min_delta: 0.001

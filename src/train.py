@@ -135,22 +135,36 @@ def test(cfg: Optional[DictConfig] = None, trainer: Optional[pl.Trainer] = None,
     
     # Get test predictions and true labels
     test_loader = datamodule.test_dataloader()
+    # Move model to GPU once, before the loop
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    best_model = best_model.to(device)
+    best_model.eval()  # Set model to evaluation mode
+
     y_test_true = []
     y_test_pred = []
+    
     with torch.no_grad():
         for batch in test_loader:
             x, y = batch
-
-            device  = 'cuda' if torch.cuda.is_available() else 'cpu'
-            preds = best_model.predict_step((x,y), 0)  # Use the predict_step method
-            y_test_true.extend(y.cpu().numpy())
-            y_test_pred.extend(preds.cpu().numpy())
+            # Move batch to GPU
+            x, y = x.to(device), y.to(device)
+            
+            # Get predictions in batches
+            preds = best_model.predict_step((x,y), 0)
+            
+            # Convert to numpy right after moving to CPU
+            y_test_true.append(y.cpu().numpy())
+            y_test_pred.append(preds.cpu().numpy())
+    
+    # Concatenate numpy arrays
+    y_test_true = np.concatenate(y_test_true)
+    y_test_pred = np.concatenate(y_test_pred)
 
     # Plot confusion matrix for test data
     plot_confusion_matrix(y_test_true, y_test_pred,
-                          class_names=datamodule.class_names,
-                          title='Confusion Matrix for Test Data',
-                          filename='test_confusion_matrix.png')
+                         class_names=datamodule.class_names,
+                         title='Confusion Matrix for Test Data',
+                         filename='test_confusion_matrix.png')
 
     log.info(f"Test metrics:\n{test_metrics}")  
     return test_metrics
