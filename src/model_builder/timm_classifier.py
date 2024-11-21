@@ -5,13 +5,19 @@ from torchmetrics import Accuracy, F1Score
 import torch.optim as optim
 import torch
 
-def get_model(model_name, num_classes, pretrained=True):
+def get_model(model_name, num_classes, pretrained=True, dropout_rate=None):
     """
     Create base model with pretrained weights from ImageNet if specified.
     """
     print(f"pretrained {pretrained} => model_name {model_name} =>  num_classes {num_classes}")
     print("#"*200)
-    model = timm.create_model(model_name, pretrained=pretrained)
+    
+    # Create model with dropout if specified
+    if dropout_rate is not None:
+        model = timm.create_model(model_name, pretrained=pretrained, drop_rate=dropout_rate)
+    else:
+        model = timm.create_model(model_name, pretrained=pretrained)
+    
     model.reset_classifier(num_classes)
     return model
 
@@ -26,9 +32,15 @@ class TimmClassifier(pl.LightningModule):
         patience: int = 3,
         factor: float = 0.1,
         min_lr: float = 1e-6,
+        dropout_rate: float = None,
     ):
         super().__init__()
-        self.model = get_model(base_model, num_classes, pretrained)
+        self.model = get_model(
+            base_model, 
+            num_classes, 
+            pretrained,
+            dropout_rate=dropout_rate
+        )
         self.num_classes = num_classes
         self.learning_rate = learning_rate
         self.weight_decay = weight_decay

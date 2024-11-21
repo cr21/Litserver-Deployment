@@ -17,33 +17,33 @@ data:
   num_workers: 4
   pin_memory: true
 
-# Adjust training parameters for better convergence
+# Increase the number of epochs for better training
 trainer:
   min_epochs: 1
-  max_epochs: 50
+  max_epochs: 100
   gradient_clip_val: 1.0
   precision: 16
   accelerator: 'gpu'
   devices: 1
-  accumulate_grad_batches: 2
+  accumulate_grad_batches: 1
 
-# Optimize model parameters
+# Adjust learning rate and batch size
 model:
   _target_: src.model_builder.timm_classifier.TimmClassifier
   base_model: vit_small_patch16_224
   num_classes: 101
   pretrained: true
-  learning_rate: 3e-4
+  learning_rate: 5e-5
   weight_decay: 1e-4
   patience: 3
-  factor: 0.5
-  min_lr: 1e-6
+  factor: 0.2
+  min_lr: 1e-7
   dropout_rate: 0.1
 
-# Adjusted early stopping
+# Early stopping configuration
 callbacks:
   early_stopping:
-    patience: 10
+    patience: 8
     monitor: "val/acc"
     mode: "max"
     min_delta: 0.001

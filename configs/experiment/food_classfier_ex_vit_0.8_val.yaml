@@ -17,7 +17,7 @@ data:
   num_workers: 4
   pin_memory: true
 
-# Adjust training parameters for better convergence
+# Increase the number of epochs for better training
 trainer:
   min_epochs: 1
   max_epochs: 50
@@ -27,26 +27,25 @@ trainer:
   devices: 1
   accumulate_grad_batches: 2
 
-# Optimize model parameters
+# Adjust learning rate and batch size
 model:
   _target_: src.model_builder.timm_classifier.TimmClassifier
-  base_model: vit_small_patch16_224
+  base_model: vit_base_patch16_224
   num_classes: 101
   pretrained: true
-  learning_rate: 3e-4
+  learning_rate: 1e-4
   weight_decay: 1e-4
   patience: 3
   factor: 0.5
-  min_lr: 1e-6
-  dropout_rate: 0.1
+  min_lr: 1e-7
 
-# Adjusted early stopping
+# Early stopping configuration
 callbacks:
   early_stopping:
-    patience: 10
+    patience: 7
     monitor: "val/acc"
     mode: "max"
-    min_delta: 0.001
+    min_delta: 0.0005
   model_checkpoint:
     dirpath: ${oc.env:PROJECT_ROOT}/checkpoints/${name}/
     filename: "best_model"
@@ -56,7 +55,7 @@ callbacks:
     save_last: True
 
 # Tags for experiment tracking
-tags: ["food_100_classification", "classification", "vit_small_patch16_224"]
+tags: ["food_100_classification", "classification", "vit_base_patch16_224"]
 
 s3_model_save_location: "pytorch-model-emlov4"
 ckpt_path: ${oc.env:PROJECT_ROOT}/checkpoints/${name}/best_model.ckpt
