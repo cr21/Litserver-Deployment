@@ -1,14 +1,14 @@
 # @package _global_
 
 defaults:
-  - override /data: food100data
+  - override /data: birddatafull
   - override /model: timm_classifier
   - override /callbacks: default
   - override /trainer: gpu
   - override /logger: default
 
 # Experiment name
-name: food_101_vit_tiny
+name: bird_200_vit_tiny
 
 seed: 42
 
@@ -17,7 +17,6 @@ data:
   num_workers: 4
   pin_memory: true
 
-# Increase the number of epochs for better training
 trainer:
   min_epochs: 1
   max_epochs: 50
@@ -25,25 +24,23 @@ trainer:
   precision: 16
   accelerator: 'gpu'
   devices: 1
-  accumulate_grad_batches: 8
+  accumulate_grad_batches: 2
 
-# Adjust learning rate and batch size
 model:
   _target_: src.model_builder.timm_classifier.TimmClassifier
   base_model: vit_tiny_patch16_224
-  num_classes: 101
+  num_classes: 200
   pretrained: true
   learning_rate: 3e-4
-  weight_decay: 2e-4
+  weight_decay: 5e-5
   patience: 3
-  factor: 0.6
+  factor: 0.5
   min_lr: 1e-6
   dropout_rate: 0.15
 
-# Early stopping configuration
 callbacks:
   early_stopping:
-    patience: 10
+    patience: 8
     monitor: "val/acc"
     mode: "max"
     min_delta: 0.001
@@ -55,8 +52,7 @@ callbacks:
     save_top_k: 1
     save_last: True
 
-# Tags for experiment tracking
-tags: ["food_101", "classification", "vit_tiny"]
+tags: ["bird_200", "classification", "vit_tiny"]
 
 s3_model_save_location: "pytorch-model-emlov4"
 ckpt_path: ${oc.env:PROJECT_ROOT}/checkpoints/${name}/best_model.ckpt

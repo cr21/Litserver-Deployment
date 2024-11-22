@@ -60,3 +60,4 @@ tags: ["food_101", "classification", "vit_tiny"]
 
 s3_model_save_location: "pytorch-model-emlov4"
 ckpt_path: ${oc.env:PROJECT_ROOT}/checkpoints/${name}/best_model.ckpt
+
