@@ -23,8 +23,3 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "RUNNING aws s3 ls pytorch-model-emlov4-predictions/bird_classification --recursive"
 aws s3 ls pytorch-model-emlov4-predictions/bird_classification --recursive
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-
-#docker run --gpus all --shm-size=8g  --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} -it --entrypoint /bin/bash 575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/food_classfier:latest
-# python3 src/eval.py data=food100data evaluation=food_100_eval
-# python3 src/infer.py  data=food100data inference=food_100_infer --cfg job
-# docker run --gpus all --shm-size=4g  --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} -it --entrypoint /bin/bash  575108919357.dkr.ecr.us-east-1.amazonaws.com/cr/food_classfier:latest

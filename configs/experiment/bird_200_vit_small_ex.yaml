@@ -1,65 +1,58 @@
 # @package _global_
 
 defaults:
-  - override /data: food100data
+  - override /data: birddatafull
   - override /model: timm_classifier
   - override /callbacks: default
   - override /trainer: gpu
   - override /logger: default
 
 # Experiment name
-name: food_101_vit_tiny
+name: bird_200_vit_small
 
 seed: 42
 
 data:
-  batch_size: 32
+  batch_size: 16
   num_workers: 4
   pin_memory: true
 
-# Increase the number of epochs for better training
 trainer:
-  min_epochs: 1
+  min_epochs: 20
   max_epochs: 50
-  gradient_clip_val: 1
+  gradient_clip_val: 0.5
   precision: 16
   accelerator: 'gpu'
   devices: 1
-  accumulate_grad_batches: 1
+  accumulate_grad_batches: 4
 
-# Adjust learning rate and batch size
 model:
   _target_: src.model_builder.timm_classifier.TimmClassifier
-  base_model: vit_tiny_patch16_224
-  num_classes: 101
+  base_model: vit_small_patch16_224
+  num_classes: 200
   pretrained: true
-  learning_rate: 5e-4
+  learning_rate: 8e-5
   weight_decay: 1e-4
-  patience: 3
-  factor: 0.8
-  min_lr: 1e-6
-  dropout_rate: 0.1
+  patience: 10
+  factor: 0.2
+  min_lr: 1e-7
+  dropout_rate: 0.3
 
-# Early stopping configuration
 callbacks:
   early_stopping:
-    patience: 8
+    patience: 15
     monitor: "val/acc"
     mode: "max"
-    min_delta: 0.001
+    min_delta: 0.0005
   model_checkpoint:
     dirpath: ${oc.env:PROJECT_ROOT}/checkpoints/${name}/
     filename: "best_model"
     monitor: "val/acc"
     mode: "max"
-    save_top_k: 1
+    save_top_k: 3
     save_last: True
 
-# Data augmentation strategies (if supported in your implementation)
-
-
-# Tags for experiment tracking
-tags: ["food_101", "classification", "vit_tiny"]
+tags: ["bird_200", "classification", "vit_small"]
 
 s3_model_save_location: "pytorch-model-emlov4"
 ckpt_path: ${oc.env:PROJECT_ROOT}/checkpoints/${name}/best_model.ckpt
