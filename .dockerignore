@@ -9,3 +9,4 @@ data/food*
 data/*
 venv/*
 /data/*
+.dvc/cache/*

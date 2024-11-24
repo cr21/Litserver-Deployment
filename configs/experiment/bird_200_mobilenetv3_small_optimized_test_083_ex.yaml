@@ -4,7 +4,7 @@ defaults:
   - override /data: birddatafull
   - override /model: timm_classifier
   - override /callbacks: default
-  - override /trainer: gpu
+  - override /trainer: cpu
   - override /logger: default
 
 # Experiment name
@@ -19,11 +19,11 @@ data:
   splits: [0.7, 0.15, 0.15]
 
 trainer:
-  min_epochs: 10
-  max_epochs: 30
+  min_epochs: 1
+  max_epochs: 1
   gradient_clip_val: 0.5
   precision: 16
-  accelerator: 'gpu'
+  accelerator: 'cpu'
   devices: 1
   accumulate_grad_batches: 2
 
