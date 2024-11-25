@@ -1,1 +1,1 @@
-# LitServer-Training
+# LitServe Training
