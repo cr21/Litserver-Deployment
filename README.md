@@ -1,1 +1,1 @@
-# MLOPS-dvc-pytorch-lightning
+# LitServer-Training
